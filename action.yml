@@ -1,0 +1,95 @@
+name: "Build and Push to Azure Registry"
+description: "Build and push a Docker image to Azure Container Registry using Service Principal"
+
+branding:
+  icon: "anchor"
+  color: "blue"
+
+inputs:
+  azure-registry:
+    description: "Azure Container Registry"
+    required: true
+  build-args:
+    description: "A list of arguments to pass to the build"
+    required: false
+  client-id:
+    description: "Azure Service Principal Client ID"
+    required: false
+    default: ""
+  client-secret:
+    description: "Azure Service Principal Client Secret"
+    required: false
+    default: ""
+  creds:
+    description: "Azure JSON Service Principal Credentials"
+    required: false
+  context:
+    description: "The build context to use"
+    required: false
+    default: "."
+  dockerfile:
+    description: "The Dockerfile to use"
+    required: false
+    default: "Dockerfile"
+  image-name:
+    description: "The name of the image to build"
+    required: false
+    default: "app"
+  platform:
+    description: "The platform to build the image for"
+    required: false
+    default: "linux/amd64"
+  push:
+    description: "Whether to push the image to the registry"
+    required: false
+    default: "false"
+  subscription-id:
+    description: "Azure Subscription ID"
+    required: false
+    default: ""
+  tag:
+    description: "A tag for the image"
+    required: true
+  tenant-id:
+    description: "Azure Service Principal Tenant ID"
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout branch
+      uses: actions/checkout@v4
+
+    - name: Create Azure Service Principal JSON environment variable
+      shell: bash
+      if: ${{ inputs.creds == "" }}
+      run: |
+        echo CREDS='{"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"}' >> $GITHUB_ENV
+
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        creds: $CREDS
+
+    - name: Log in to ACR
+      uses: azure/docker-login@v2
+      with:
+        login-server: ${{ inputs.azure-registry }}
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        build-args: ${{ inputs.build-args }}
+        context: ${{ inputs.context }}
+        dockerfile: ${{ inputs.dockerfile }}
+        platforms: ${{ inputs.platform }}
+        push: ${{ inputs.push }}
+        tags: |
+          ${{ inputs.azure-registry }}/${{ inputs.image-name }}:${{ inputs.tag }}
