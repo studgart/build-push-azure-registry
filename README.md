@@ -1,7 +1,7 @@
 # Build and Push to Azure Registry
 
-- [Build and Test TS/JS Application](#tag-semver-action)
-  - [Input Parameters](#build-and-test-tsjs-applications)
+- [Build and Push to Azure Registry](#build-and-push-to-azure-registry)
+  - [Input Parameters](#input-parameters)
   - [Workflow Examples](#workflow-examples)
   - [Reference](#reference)
   - [Contributing](#contributing)
@@ -12,13 +12,21 @@
 
 ## Input Parameters
 
-| Parameter Name    | Required? | Type    | Default Value | Description                                    |
-| ----------------- | --------- | ------- | ------------- | ---------------------------------------------- |
-| working-directory | false     | string  | .             | Path to the project directory                  |
-| package-manager   | false     | string  | npm           | Package manager (npm \| yarn \| pnpm)          |
-| node-version      | false     | string  | 20            | Node.js version                                |
-| run-sonar-test    | false     | boolean | false         | Whether to run Sonar test or not               |
-| sonar-token       | false     | string  | ""            | Token to authenticate connection to SonarCloud |
+| Parameter Name  | Required? | Type    | Default Value | Description                               |
+| --------------- | --------- | ------- | ------------- | ----------------------------------------- |
+| azure-registry  | true      | string  |               | Azure Container Registry DNS              |
+| build-args      | false     | list    |               | A list of arguments to pass to the build  |
+| client-id       | false     | UUID    | ""            | Azure Service Principal Client ID         |
+| client-secret   | false     | UUID    | ""            | Azure Service Principal Client Secret     |
+| creds           | false     | string  | ""            | Azure JSON Service Principal Credentials  |
+| context         | false     | string  | "."           | The build context to use                  |
+| dockerfile      | false     | string  | "Dockerfile"  | The location of Dockerfile                |
+| image-name      | false     | string  | "app"         | The name of the image to build            |
+| platform        | false     | string  | "linux/amd64" | The platform to build the image for       |
+| push            | false     | boolean | "false"       | Whether to push the image to the registry |
+| subscription-id | false     | UUID    | ""            | Azure Subscription ID                     |
+| tag             | false     | string  | "latest"      | A tag for the Docker image                |
+| tenant-id       | false     | UUID    | ""            | Azure Service Principal Tenant ID         |
 
 ## Workflow Examples
 
