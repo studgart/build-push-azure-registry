@@ -62,16 +62,22 @@ runs:
     - name: Checkout branch
       uses: actions/checkout@v4
 
-    - name: Create Azure Service Principal JSON environment variable
+    - name: Create JSON creds if not exist
       shell: bash
       if: ${{ inputs.creds == '' }}
       run: |
         echo CREDS='{"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"}' >> $GITHUB_ENV
 
+    - name: Set up env if creds exist
+      shell: bash
+      if: ${{ inputs.creds != '' }}
+      run: |
+        echo CREDS=${inputs.creds} >> $GITHUB_ENV
+
     - name: Azure login
       uses: azure/login@v2
       with:
-        creds: $CREDS
+        creds: ${{env.CREDS}}
 
     - name: Log in to ACR
       uses: azure/docker-login@v2
