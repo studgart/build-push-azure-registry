@@ -101,7 +101,7 @@ runs:
       with:
         build-args: ${{ inputs.build-args }}
         context: ${{ inputs.context }}
-        dockerfile: ${{ inputs.dockerfile }}
+        file: ${{ inputs.dockerfile }}
         platforms: ${{ inputs.platform }}
         push: ${{ inputs.push }}
         tags: |
