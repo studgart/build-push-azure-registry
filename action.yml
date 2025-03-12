@@ -66,13 +66,19 @@ runs:
       shell: bash
       if: ${{ inputs.creds == '' }}
       run: |
-        echo CREDS='{"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"}' >> $GITHUB_ENV
+        echo CREDS={"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"} >> $GITHUB_ENV
 
     - name: Set up env if creds exist
       shell: bash
       if: ${{ inputs.creds != '' }}
       run: |
         echo CREDS=${inputs.creds} >> $GITHUB_ENV
+
+    - name: Set up env for ACR domain
+      shell: bash
+      run: |
+        REGISTRY_NAME="${{ inputs.azure-registry }}"
+        echo REGISTRY_NAME="${REGISTRY_NAME%.azurecr.io}" >> $GITHUB_ENV
 
     - name: Azure login
       uses: azure/login@v2
@@ -82,9 +88,7 @@ runs:
     - name: Log in to ACR
       shell: bash
       run: |
-        REGISTRY_NAME="${{ inputs.azure-registry }}"
-        REGISTRY_NAME="${REGISTRY_NAME%.azurecr.io}"
-        az acr login --name "$REGISTRY_NAME"
+        az acr login --name ${{env.REGISTRY_NAME}}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
