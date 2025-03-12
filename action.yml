@@ -83,6 +83,7 @@ runs:
       uses: azure/docker-login@v2
       with:
         login-server: ${{ inputs.azure-registry }}
+        username: 00000000-0000-0000-0000-000000000000
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
