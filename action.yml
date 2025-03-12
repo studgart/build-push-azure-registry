@@ -1,60 +1,60 @@
-name: "Build and Push to Azure Registry"
-description: "Build and push a Docker image to Azure Container Registry using Service Principal"
+name: 'Build and Push to Azure Registry'
+description: 'Build and push a Docker image to Azure Container Registry using Service Principal'
 
 branding:
-  icon: "anchor"
-  color: "blue"
+  icon: 'anchor'
+  color: 'blue'
 
 inputs:
   azure-registry:
-    description: "Azure Container Registry"
+    description: 'Azure Container Registry'
     required: true
   build-args:
-    description: "A list of arguments to pass to the build"
+    description: 'A list of arguments to pass to the build'
     required: false
   client-id:
-    description: "Azure Service Principal Client ID"
+    description: 'Azure Service Principal Client ID'
     required: false
-    default: ""
+    default: ''
   client-secret:
-    description: "Azure Service Principal Client Secret"
+    description: 'Azure Service Principal Client Secret'
     required: false
-    default: ""
+    default: ''
   creds:
-    description: "Azure JSON Service Principal Credentials"
+    description: 'Azure JSON Service Principal Credentials'
     required: false
   context:
-    description: "The build context to use"
+    description: 'The build context to use'
     required: false
-    default: "."
+    default: '.'
   dockerfile:
-    description: "The Dockerfile to use"
+    description: 'The Dockerfile to use'
     required: false
-    default: "Dockerfile"
+    default: 'Dockerfile'
   image-name:
-    description: "The name of the image to build"
+    description: 'The name of the image to build'
     required: false
-    default: "app"
+    default: 'app'
   platform:
-    description: "The platform to build the image for"
+    description: 'The platform to build the image for'
     required: false
-    default: "linux/amd64"
+    default: 'linux/amd64'
   push:
-    description: "Whether to push the image to the registry"
+    description: 'Whether to push the image to the registry'
     required: false
-    default: "false"
+    default: 'false'
   subscription-id:
-    description: "Azure Subscription ID"
+    description: 'Azure Subscription ID'
     required: false
-    default: ""
+    default: ''
   tag:
-    description: "A tag for the image"
+    description: 'A tag for the image'
     required: false
-    default: "latest"
+    default: 'latest'
   tenant-id:
-    description: "Azure Service Principal Tenant ID"
+    description: 'Azure Service Principal Tenant ID'
     required: false
-    default: ""
+    default: ''
 
 runs:
   using: composite
@@ -64,7 +64,7 @@ runs:
 
     - name: Create Azure Service Principal JSON environment variable
       shell: bash
-      if: ${{ inputs.creds == "" }}
+      if: ${{ inputs.creds == '' }}
       run: |
         echo CREDS='{"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"}' >> $GITHUB_ENV
 
