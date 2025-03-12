@@ -33,3 +33,4 @@
 ## Reference
 
 ## Contributing
+This action is open for contributing and discussion.
