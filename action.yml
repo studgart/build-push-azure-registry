@@ -101,4 +101,4 @@ runs:
         platforms: ${{ inputs.platform }}
         push: ${{ inputs.push }}
         tags: |
-          ${{ inputs.azure-registry }}/${{ inputs.image-name }}:${{ inputs.tag }}
+          ${REGISTRY_NAME}.azurecr.io/${{ inputs.image-name }}:${{ inputs.tag }}
