@@ -80,10 +80,11 @@ runs:
         creds: ${{env.CREDS}}
 
     - name: Log in to ACR
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ inputs.azure-registry }}
-        username: 00000000-0000-0000-0000-000000000000
+      shell: bash
+      run: |
+        REGISTRY_NAME="${{ inputs.azure-registry }}"
+        REGISTRY_NAME="${REGISTRY_NAME%.azurecr.io}"
+        az acr login --name "$REGISTRY_NAME"
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
