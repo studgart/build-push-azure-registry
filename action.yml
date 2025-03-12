@@ -66,7 +66,7 @@ runs:
       shell: bash
       if: ${{ inputs.creds == '' }}
       run: |
-        echo CREDS={"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"} >> $GITHUB_ENV
+        echo CREDS='{"clientId":"${{inputs.client-id}}","clientSecret":"${{inputs.client-secret}}","subscriptionId":"${{inputs.subscription-id}}","tenantId":"${{inputs.tenant-id}}"}' >> $GITHUB_ENV
 
     - name: Set up env if creds exist
       shell: bash
